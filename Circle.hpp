@@ -2,12 +2,12 @@
 
 #include <iostream>
 #include <SFML/Graphics.hpp>
-#include "Element.h"
+#include "Element.hpp"
 
 class Circle : public Element
 {
 public:
-    Circle(float x, float y, int radius, int rotation = 0, bool hasGravity = false, float velocityOnX = 0, float velocityOnY = 0, sf::Color color = sf::Color::Black);
+    Circle(float x, float y, int radius, float rotation = 0, bool hasGravity = false, float velocityOnX = 0, float velocityOnY = 0, sf::Color color = sf::Color::White);
     ~Circle();
 
     void draw(sf::RenderWindow &window);

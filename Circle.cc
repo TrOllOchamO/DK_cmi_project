@@ -1,6 +1,6 @@
-#include "Circle.h"
+#include "Circle.hpp"
 
-Circle::Circle(float x, float y, int radius, int rotation, bool hasGravity, float velocityOnX, float velocityOnY, sf::Color color) : 
+Circle::Circle(float x, float y, int radius, float rotation, bool hasGravity, float velocityOnX, float velocityOnY, sf::Color color) : 
 Element(x, y, rotation, hasGravity, velocityOnX, velocityOnY, color), m_radius(radius)
 {
     

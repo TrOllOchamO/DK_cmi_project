@@ -1,6 +1,6 @@
-#include "Element.h"
+#include "Element.hpp"
 
-Element::Element(float x, float y, int rotation, bool hasGravity, float velocityOnX, float velocityOnY, sf::Color color) : 
+Element::Element(float x, float y, float rotation, bool hasGravity, float velocityOnX, float velocityOnY, sf::Color color) : 
 m_x(x), m_y(y), m_rotation(rotation), m_hasGravity(hasGravity), m_velocityOnX(velocityOnX), m_velocityOnY(velocityOnY), m_color(color)
 {
     

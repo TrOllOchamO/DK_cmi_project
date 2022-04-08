@@ -1,6 +1,6 @@
-#include "Rectangle.h"
+#include "Rectangle.hpp"
 
-Rectangle::Rectangle(float x, float y, int width, int height, int rotation, bool hasGravity, float velocityOnX, float velocityOnY, sf::Color color) : 
+Rectangle::Rectangle(float x, float y, int width, int height, float rotation, bool hasGravity, float velocityOnX, float velocityOnY, sf::Color color) : 
 Element(x, y, rotation, hasGravity, velocityOnX, velocityOnY, color), m_width(width), m_height(height)
 {
 

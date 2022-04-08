@@ -3,12 +3,12 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
 
-#include "Math.h"
+#include "Math.hpp"
 
 class Element
 {
 public:
-    Element(float x, float y, int rotation = 0, bool hasGravity = false, float velocityOnX = 0, float velocityOnY = 0, sf::Color color = sf::Color::Black);
+    Element(float x, float y, float rotation = 0, bool hasGravity = false, float velocityOnX = 0, float velocityOnY = 0, sf::Color color = sf::Color::White);
     ~Element();
 
     void apply_gravity(float timeElapsed, float gravityAcceleration);
@@ -36,7 +36,7 @@ public:
 protected:
     float m_x;
     float m_y;
-    int m_rotation;
+    float m_rotation;
     bool m_hasGravity;
     float m_velocityOnX;
     float m_velocityOnY;
