@@ -6,6 +6,7 @@
 #include "Element.hpp"
 #include "Rectangle.hpp"
 #include "Circle.hpp"
+#include "Physics.hpp"
 
 enum GameState
 {
