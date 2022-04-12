@@ -19,10 +19,10 @@ bool Physics::GJK(Element *e1, Element *e2)
 
     // create a simplex and add the first point to it
     std::vector<Vector2D> simplex; 
-    simplex[0] = Physics::support(e1, e2, direction);
+    simplex.push_back(Physics::support(e1, e2, direction));
 
     // setting the new direction toward the origin
-    direction = -simplex[0]; // == ORIGIN - A == (0, 0) - A
+    direction = Math::normalize_vector(-simplex[0]); // == ORIGIN - A == (0, 0) - A
 
     while (true)
     {
@@ -67,15 +67,13 @@ bool Physics::handle_line_simplex(std::vector<Vector2D> &simplex, Vector2D &dire
     // get the vector perpendicular to AB and pointing toward the origin
     Vector2D ABPerp = Math::triple_cross_product(AB, OA, AB);
 
-    direction = ABPerp; // redifine the direction toward the origin
+    direction = Math::normalize_vector(ABPerp); // redifine the direction toward the origin
 
     // since the simplex is a line the odd of it to containing the origin in a 2D space
     // is almost null, so return null without bothering to check is more efficient
     // if the simplex was indeed containing the origin the next step of the gjk will tell it
     return false;
 }
-
-
 
 bool Physics::handle_triangle_simplex(std::vector<Vector2D> &simplex, Vector2D &direction)
 {
@@ -93,7 +91,7 @@ bool Physics::handle_triangle_simplex(std::vector<Vector2D> &simplex, Vector2D &
     if (Math::dot(ABPerp, AO) > 0) // if the origin is in the region AB
     {
         simplex.erase(simplex.begin()); // remove the point C of the simplex
-        direction = ABPerp; // setting the new direction toward the region AB
+        direction = Math::normalize_vector(ABPerp); // setting the new direction toward the region AB
         return false; // since the point is contain in the region AB then it's not contain in the simplex
     }
 
@@ -101,7 +99,7 @@ bool Physics::handle_triangle_simplex(std::vector<Vector2D> &simplex, Vector2D &
     if (Math::dot(ACPerp, AO) > 0) // if the origin is in the region AC
     {
         simplex.erase(std::next(simplex.begin())); // remove the point B of the simplex
-        direction = ABPerp; // setting the new direction toward the region AC
+        direction = Math::normalize_vector(ACPerp); // setting the new direction toward the region AC
         return false; // since the point is contain in the region AC then it's not contain in the simplex
     }
 

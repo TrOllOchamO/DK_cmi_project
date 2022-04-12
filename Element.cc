@@ -13,8 +13,8 @@ Element::~Element()
 
 void Element::update_position(float timeElapsed)
 {
-    m_x += m_velocityOnX*timeElapsed;
-    m_y += m_velocityOnY*timeElapsed;
+    m_x += m_velocityOnX * timeElapsed;
+    m_y += m_velocityOnY * timeElapsed;
 }
 
 void Element::set_x(float x) { m_x = x; }

@@ -22,8 +22,7 @@ void Circle::draw(sf::RenderWindow &window)
 
 Vector2D Circle::get_center() const
 {
-    const float halfRadius = m_radius/2;
-    Vector2D center = {m_x + halfRadius, m_y + halfRadius};
+    const Vector2D center = {m_x + m_radius, m_y + m_radius};
     return center;
 }
 

@@ -1,6 +1,8 @@
 #pragma once
 
-#include<SFML/Graphics.hpp>
+#include <vector>
+#include <math.h>
+#include <SFML/Graphics.hpp>
 
 #include "Element.hpp"
 
@@ -13,6 +15,7 @@ public:
     void draw(sf::RenderWindow &window);
     Vector2D get_center() const;
     Vector2D get_futhest_point(const Vector2D &direction) const;
+    std::vector<Vector2D> get_vertices_coord() const;
 
 private:
     int m_width;
