@@ -17,6 +17,12 @@ void Element::update_position(float timeElapsed)
     m_y += m_velocityOnY * timeElapsed;
 }
 
+void Element::move_in_a_direction(const Vector2D &direction, float distance)
+{
+    m_x += direction.x*distance;
+    m_y += direction.y*distance;
+}
+
 void Element::set_x(float x) { m_x = x; }
 void Element::set_y(float y) { m_y = y; }
 void Element::set_has_gravity(bool hasGravity) { m_hasGravity = hasGravity; }

@@ -24,7 +24,13 @@ void Rectangle::draw(sf::RenderWindow &window)
 
 Vector2D Rectangle::get_center() const
 {
-    const Vector2D center = { m_x + m_width/2, m_y + m_height/2 };
+    const float angleInRadiant = (m_rotation*PI)/180;
+    const float cosAngle = cos(angleInRadiant);
+    const float sinAngle = sin(angleInRadiant);
+    const float halfWidth = m_width/2;
+    const float halfHeight = m_height/2;
+
+    const Vector2D center = {m_x + halfWidth*cosAngle - halfHeight*sinAngle, m_y + halfWidth*sinAngle + halfHeight*cosAngle};
     return center;
 }
 
@@ -39,8 +45,8 @@ std::vector<Vector2D> Rectangle::get_vertices_coord() const
     std::vector<Vector2D> vertices;
     vertices.push_back(Vector2D(m_x, m_y)); // top left corner
     vertices.push_back(Vector2D(m_x + m_width*cosAngle, m_y + sinAngle*m_width)); // top right corner
-    vertices.push_back(Vector2D(m_x - m_height*sinAngle, m_y + m_height*cosAngle)); // bottom left corner
     vertices.push_back(Vector2D(m_x + m_width*cosAngle - m_height*sinAngle, m_y + m_width*sinAngle + m_height*cosAngle)); // bottom right corner
+    vertices.push_back(Vector2D(m_x - m_height*sinAngle, m_y + m_height*cosAngle)); // bottom left corner
 
     return vertices;
 }
@@ -48,7 +54,7 @@ std::vector<Vector2D> Rectangle::get_vertices_coord() const
 Vector2D Rectangle::get_futhest_point(const Vector2D &direction) const
 {
     std::vector<Vector2D> vertices = Rectangle::get_vertices_coord();
-
+    
     Vector2D futhest = vertices[0]; // initialize the futhest point with the coordinates of a random corner
     float bestScore = Math::dot(direction, futhest); // calculate the score of this point
 

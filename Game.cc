@@ -1,6 +1,6 @@
 #include "Game.hpp"
 
-Game::Game() : m_windowWidth(960), m_windowHeight(540), m_mario(Player(1, 1, 1, 1)),
+Game::Game() : m_windowWidth(960), m_windowHeight(540), m_mario(nullptr),
 m_window(sf::VideoMode(m_windowWidth, m_windowHeight), L"Donkey Kong Arcade Incroyable")
 {
   load_resources();
@@ -13,7 +13,7 @@ Game::~Game()
     delete m_backGroundElements[i];
   }
 
-  delete &m_mario;
+  delete m_mario;
 }
 
 void Game::load_resources()
@@ -81,20 +81,24 @@ void Game::handle_events()
 void Game::update(float dt)
 {
   // Effectue ces évènements lors qu'une touche est appuyé
-  if (m_inputs.leftKeyPressed) {  m_mario.set_velocity_on_x(-100); }
-  else if (m_inputs.rightKeyPressed) {  m_mario.set_velocity_on_x(100); }
-  else {  m_mario.set_velocity_on_x(0); }
+  if (m_inputs.leftKeyPressed) {  m_mario->set_velocity_on_x(-100); }
+  else if (m_inputs.rightKeyPressed) {  m_mario->set_velocity_on_x(100); }
+  else {  m_mario->set_velocity_on_x(0); }
 
-  if (m_inputs.upKeyPressed) { m_mario.set_velocity_on_y(-100);  }
-  else { m_mario.set_velocity_on_y(0); }
+  if (m_inputs.upKeyPressed) { m_mario->set_velocity_on_y(-100);  }
+  // else { m_mario->set_velocity_on_y(0); }
 
-  m_mario.update_position(dt);
+  Physics::apply_gravity(m_mario, dt, 100);
+  m_mario->update_position(dt);
 
+  Vector2D direction;
   for (int i = 0; i < m_backGroundElements.size(); ++i)
   {
-    if (Physics::GJK(&m_mario, m_backGroundElements[i]))
+    const float distance = Physics::EPA(m_mario, m_backGroundElements[i], direction);
+    if (distance > 0) // if there is collision
     {
       m_backGroundElements[i]->set_color(sf::Color::Red);
+      m_mario->move_in_a_direction(direction, -distance);
     }
     else
     {
@@ -112,7 +116,7 @@ void Game::render()
     m_backGroundElements[i]->draw(m_window);
   }
 
-  m_mario.draw(m_window);
+  m_mario->draw(m_window);
 
   m_window.display();
 }
@@ -130,5 +134,5 @@ sf::Font Game::get_font() const { return m_font; }
 UserInputs Game::get_user_inputs() const { return m_inputs; }
 
 // setters
-void Game::set_mario(const Player *mario) { m_mario = *mario;}
+void Game::set_mario(Player *mario) { m_mario = mario;}
 void Game::set_text_score(const sf::Text &text) { m_text_score = text; }

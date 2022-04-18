@@ -1,5 +1,8 @@
 #include "Physics.hpp"
 
+#define INFINIT_DISTANCE std::numeric_limits<float>::max()
+#define EPA_PRECISION_WANTED 0.001
+
 void Physics::apply_gravity(Element *element, float timeElapsed, float gravityAcceleration)
 {
     if (element->get_has_gravity()) // apply gravity only if the element shoud be affected by the gravity
@@ -10,15 +13,15 @@ void Physics::apply_gravity(Element *element, float timeElapsed, float gravityAc
     }
 }
 
-bool Physics::GJK(Element *e1, Element *e2)
+bool Physics::GJK(const Element *e1, const Element *e2)
 {
     // get the first direction vector
     const Vector2D e1Center = e1->get_center();
     const Vector2D e2Center = e2->get_center();
     Vector2D direction(Math::normalize_vector(e2Center - e1Center));
 
-    // create a simplex and add the first point to it
-    std::vector<Vector2D> simplex; 
+    // create the simplex vector and then add the first point to it
+    std::vector<Vector2D> simplex;
     simplex.push_back(Physics::support(e1, e2, direction));
 
     // setting the new direction toward the origin
@@ -26,12 +29,15 @@ bool Physics::GJK(Element *e1, Element *e2)
 
     while (true)
     {
-        // get the second point of the vertex
+        // get an other point on the Minkowski difference
         Vector2D A = Physics::support(e1, e2, direction);
 
         // if the new point didn't pass the origin then the origin can't be inside the Minkowski difference
         // and by extention the 2 shapes aren't colliding, so return false
-        if (Math::dot(A, direction) < 0) { return false; }
+        if (Math::dot(A, direction) < 0) 
+        {
+            return false; 
+        }
         
         // append the new point to the simplex
         simplex.push_back(A);
@@ -45,7 +51,99 @@ bool Physics::GJK(Element *e1, Element *e2)
     }
 }
 
-Vector2D Physics::support(Element *e1, Element *e2, Vector2D &direction)
+bool Physics::GJK(const Element *e1, const Element *e2, std::vector<Vector2D> &simplex)
+{
+    // get the first direction vector
+    const Vector2D e1Center = e1->get_center();
+    const Vector2D e2Center = e2->get_center();
+    Vector2D direction(Math::normalize_vector(e2Center - e1Center));
+
+    // make sure the simplex is empty and then add the first point to it
+    assert(simplex.size() == 0);
+    simplex.push_back(Physics::support(e1, e2, direction));
+
+    // setting the new direction toward the origin
+    direction = Math::normalize_vector(-simplex[0]); // == ORIGIN - A == (0, 0) - A
+
+    while (true)
+    {
+        // get an other point on the Minkowski difference
+        Vector2D A = Physics::support(e1, e2, direction);
+
+        // if the new point didn't pass the origin then the origin can't be inside the Minkowski difference
+        // and by extention the 2 shapes aren't colliding, so return false
+        // BUT since we need the function to return a 3D simplex (in order to be able to use it in EPA)
+        // we will add points to the simplex if needed
+        if (Math::dot(A, direction) < 0) 
+        {
+            direction = Math::normal_clockwise(direction);
+
+            while (simplex.size() < 3)
+            {
+                Vector2D newPoint = Physics::support(e1, e2, direction);
+
+                // if the new point isn't already in the simplex
+                if (std::find(simplex.begin(), simplex.end(), newPoint) == simplex.end())
+                {
+                    simplex.push_back(newPoint); // add the new point to the simplex
+                }
+
+                direction = Math::normal_clockwise(direction);
+            }
+            return false;
+        }
+        
+        // append the new point to the simplex
+        simplex.push_back(A);
+
+        // return true if the origin is inside the simplex
+        // else modify the direction vector and the simplex in order to reiterate the steps
+        if (handle_simplex(simplex, direction))
+        {
+            return true;
+        }
+    }
+}
+
+float Physics::EPA(const Element *e1, const Element *e2, Vector2D &direction, std::vector<Vector2D> polytope)
+{
+    float closestEdgeDistance;
+    Vector2D closestEdgeNormal;
+
+    // while the precision is too low copared to the goal minDistance will be set to INFINIT_DISTANCE
+    while (true)
+    {
+        int closestEdgeIndex = Physics::get_closest_edge_infos(polytope, closestEdgeDistance, closestEdgeNormal);
+
+        // once we got the normal of the closest edge to the origin so we can use it to determine a new point
+        // on the edge of the Minkowski difference
+        Vector2D support = Physics::support(e1, e2, closestEdgeNormal);
+
+        // calculate the distance 
+        float supportDistance = Math::dot(closestEdgeNormal, support);
+        
+        // the difference between the 2 distance is less then the precision then we 
+        // there is no need to expand the polytope any futher, so we return 
+        if(supportDistance - closestEdgeDistance < EPA_PRECISION_WANTED)
+        {
+            direction = closestEdgeNormal;
+            return closestEdgeDistance;
+        }
+
+        // if we still are able to expand the polytope, insert the new point in the polytope
+        // the point must be inserted bewteen i and j in order to keep the polytope convex
+        polytope.insert(polytope.begin() + closestEdgeIndex, support);
+    }
+}
+
+float Physics::EPA(const Element *e1, const Element *e2, Vector2D &direction)
+{
+    std::vector<Vector2D> polytope;
+    Physics::GJK(e1, e2, polytope);
+    return Physics::EPA(e1, e2, direction, polytope);
+}
+
+Vector2D Physics::support(const Element *e1, const Element *e2, Vector2D &direction)
 {
     return e1->get_futhest_point(direction) - e2->get_futhest_point(-direction);
 }
@@ -77,11 +175,9 @@ bool Physics::handle_line_simplex(std::vector<Vector2D> &simplex, Vector2D &dire
 
 bool Physics::handle_triangle_simplex(std::vector<Vector2D> &simplex, Vector2D &direction)
 {
-    int simplexSize = simplex.size();
-
-    Vector2D A = simplex[simplexSize - 1];
-    Vector2D B = simplex[simplexSize - 2];
-    Vector2D C = simplex[simplexSize - 3];
+    Vector2D A = simplex[2];
+    Vector2D B = simplex[1];
+    Vector2D C = simplex[0];
 
     Vector2D AB = B - A;
     Vector2D AC = C - A;
@@ -106,4 +202,40 @@ bool Physics::handle_triangle_simplex(std::vector<Vector2D> &simplex, Vector2D &
     // if the origin isn't in both of the 2 area then it belong in the simplex due to the way
     // we first obtained this simplex, so we return true
     return true;
+}
+
+int Physics::get_closest_edge_infos(const std::vector<Vector2D> &polytope, float &minDistance, Vector2D &minNormal)
+{
+    // making sure the politype is valid
+    assert(polytope.size() > 2);
+
+    int closestEdgeIndex;
+    minDistance = INFINIT_DISTANCE;
+
+    for (int i = 0; i < polytope.size(); ++i)
+    {
+        // determine the index j wich is the second point of the tested edge (i being the first one)
+        int j = (i+1) % polytope.size();
+
+        Vector2D vertexI = polytope[i];
+        Vector2D vertexJ = polytope[j];
+
+        Vector2D IJ = vertexJ - vertexI;
+
+        // get the normal vector by swapping coordinates and negating one
+        // avoid to use the triple product wich can cause troubles when dealing with really tiny vectors
+        Vector2D currentNormal = Math::normalize_vector(Math::normal_clockwise(IJ));
+
+        float currentDistance = Math::dot(currentNormal, vertexI);
+
+        // if the new distance is smaller than the actual smallest replace the smallest
+        if (currentDistance < minDistance)
+        {
+            minDistance = currentDistance;
+            minNormal = currentNormal;
+            closestEdgeIndex = j;
+        }
+    }
+
+    return closestEdgeIndex;
 }

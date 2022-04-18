@@ -12,6 +12,7 @@ public:
     virtual ~Element();
 
     void update_position(float timeElapsed);
+    void move_in_a_direction(const Vector2D &direction, float distance);
     virtual void draw(sf::RenderWindow &window) = 0;
 
     // Used to calculate colision

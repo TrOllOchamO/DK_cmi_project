@@ -44,7 +44,7 @@ public:
     UserInputs get_user_inputs() const;
 
     // Setter
-    void set_mario(const Player *mario);
+    void set_mario(Player *mario);
     void set_text_score(const sf::Text &text);
 
 private:
@@ -53,11 +53,11 @@ private:
     GameState game_state;
     int m_windowWidth;
     int m_windowHeight;
-    Player m_mario;
     UserInputs m_inputs;
 
     std::vector<Element*> m_backGroundElements;
     std::list<Element*> m_movingElements;
+    Player *m_mario;
 
     // the window and resources
     sf::RenderWindow m_window;

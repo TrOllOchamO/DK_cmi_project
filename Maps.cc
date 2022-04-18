@@ -17,7 +17,7 @@ void Maps::set_map1(Game &game)
     text.setPosition(0, 0);
     game.set_text_score(text);
 
-    Player *mario = new Player(3, WINDOW_HEIGHT - PLATFORM_HEIGHT - MARIO_HEIGHT, MARIO_WIDTH, MARIO_HEIGHT, 0, false);
+    Player *mario = new Player(3, WINDOW_HEIGHT - PLATFORM_HEIGHT - MARIO_HEIGHT, MARIO_WIDTH, MARIO_HEIGHT, 0, true);
     game.set_mario(mario);
 
     Circle *circle = new Circle(10, 10, 5);
