@@ -23,6 +23,11 @@ void Element::move_in_a_direction(const Vector2D &direction, float distance)
     m_y += direction.y*distance;
 }
 
+void Element::update_animation(float dt)
+{
+    
+}
+
 // Setters
 void Element::set_x(float x) { m_x = x; }
 void Element::set_y(float y) { m_y = y; }

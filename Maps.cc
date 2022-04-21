@@ -2,11 +2,16 @@
 
 void Maps::set_map1(Game &game)
 {
+    // start by loading the textures into the game
+    
+
+
+
     const int WINDOW_WIDTH = game.get_windowWidth();
     const int WINDOW_HEIGHT = game.get_windowHeight();
     const int PLATFORM_HEIGHT = WINDOW_HEIGHT / 30;
     const int MARIO_SIZE = WINDOW_HEIGHT / 14;
-    sf::Font font = game.get_font();
+    sf::Font font = game.get_fonts();
 
     Player *mario = new Player(3, WINDOW_HEIGHT - PLATFORM_HEIGHT - MARIO_SIZE, MARIO_SIZE, MARIO_SIZE, 0, true);
     game.set_mario(mario);
@@ -38,3 +43,5 @@ void Maps::set_map1(Game &game)
     Rectangle *point_to_reach = new Rectangle(WINDOW_WIDTH / 2 - WINDOW_WIDTH / 16, WINDOW_HEIGHT - PLATFORM_HEIGHT - MARIO_SIZE * 10, WINDOW_WIDTH / 8, PLATFORM_HEIGHT, 0, false, 0, 0, sf::Color::White, game.get_texture_mur());
     game.add_element_to_background(point_to_reach);
 }
+
+

@@ -6,8 +6,8 @@ TARGETS = main
 
 all: $(TARGETS)
 
-$(TARGETS): Element.o Rectangle.o Circle.o Math.o Game.o Maps.o Physics.o Player.o Text.o main.o 
-	$(CXX) $(LDFLAGS) Element.o Rectangle.o Circle.o Math.o Game.o Maps.o Physics.o Player.o Text.o main.o -o $(TARGETS)
+$(TARGETS): Element.o Rectangle.o Circle.o Math.o Game.o Maps.o Physics.o Player.o Text.o ScoreBoard.o main.o 
+	$(CXX) $(LDFLAGS) Element.o Rectangle.o Circle.o Math.o Game.o Maps.o Physics.o Player.o Text.o ScoreBoard.o main.o -o $(TARGETS)
 Element.o: Element.cc Element.hpp Math.hpp
 	$(CXX) $(CXXFLAGS) -c -o Element.o Element.cc
 Rectangle.o: Rectangle.cc Rectangle.hpp Element.hpp
@@ -26,6 +26,8 @@ Player.o: Player.cc Player.hpp Rectangle.hpp
 	$(CXX) $(CXXFLAGS) -c -o Player.o Player.cc
 Text.o: Text.cc Text.hpp Element.hpp
 	$(CXX) $(CXXFLAGS) -c -o Text.o Text.cc
+ScoreBoard.o: ScoreBoard.cc ScoreBoard.hpp Rectangle.hpp Text.hpp
+	$(CXX) $(CXXFLAGS) -c -o ScoreBoard.o ScoreBoard.cc
 main.o: main.cc Element.hpp Rectangle.hpp Circle.hpp Math.hpp Game.hpp Maps.hpp Physics.hpp
 	$(CXX) $(CXXFLAGS) -c -o main.o main.cc
 

@@ -9,6 +9,7 @@
 #include "Physics.hpp"
 #include "Player.hpp"
 #include "Text.hpp"
+#include "Resources.hpp"
 
 enum GameState
 {
@@ -33,7 +34,7 @@ public:
     void handle_events();
     void update(float dt);
     void render();
-    void animation();
+    void animation(bool facing);
 
     void add_element_to_background(Element *element);
 
@@ -42,36 +43,27 @@ public:
     // Getters
     int get_windowWidth() const;
     int get_windowHeight() const;
-    sf::Font get_font() const;
+    sf::Font get_fonts() const;
     UserInputs get_user_inputs() const;
-    sf::Texture get_texture_mur() const;
+    Resources* get_resources() const;
 
     // Setter
     void set_mario(Player *mario);
-    void set_text_score(const sf::Text &text);
 
 private:
-    void load_resources();
-
     GameState game_state;
     int m_windowWidth;
     int m_windowHeight;
-    int m_animation;
+    int m_animation = 0;
     UserInputs m_inputs;
 
     std::vector<Element*> m_backGroundElements;
     std::list<Element*> m_movingElements;
     Player *m_mario;
 
-    // the window and resources
     sf::RenderWindow m_window;
 
-    // Murs
-    sf::Texture m_mur;
-    sf::Image m_mario_img[4];
-    sf::Texture m_marios_life;
+    sf::Clock sprites;
 
-    // Fonts
-    sf::Font m_font;
-    sf::Text m_text_score;
+    Resources *m_resources;
 };

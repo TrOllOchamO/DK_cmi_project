@@ -1,8 +1,9 @@
 #include "Text.hpp"
 
-Text::Text(std::string text, int size, sf::Font font, float x, float y, int width, int height, float rotation, bool hasGravity, float velocityOnX, float velocityOnY, sf::Color color)
+Text::Text(float x, float y, std::string text, sf::Font font, int size, float rotation, sf::Color color)
     : Element(x, y, 0, false, 0, 0, color), m_text(text), m_size(size), m_font(font)
 {
+
 }
 
 Text::~Text() {}

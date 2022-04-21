@@ -4,7 +4,8 @@
 
 class Text : public Element {
 public:
-    Text(std::string text, int size, sf::Font font, float x, float y, int width = 0, int height = 0, float rotation = 0, bool hasGravity = false, float velocityOnX = 0, float velocityOnY = 0, sf::Color color = sf::Color::White);
+    Text(float x, float y, std::string text, sf::Font font, int size = 5, float rotation = 0, sf::Color color = sf::Color::White);
+    Text();
     ~Text();
 
     void draw(sf::RenderWindow & window);
