@@ -5,7 +5,7 @@
 class Player : public Rectangle
 {
 public:
-    Player(float x, float y, int width, int height, float rotation = 0, bool hasGravity = false, float velocityOnX = 0, float velocityOnY = 0, sf::Color color = sf::Color::White, int life = 3, int score = 0);
+    Player(float x, float y, int width, int height, float rotation = 0, bool hasGravity = false, float velocityOnX = 0, float velocityOnY = 0, sf::Color color = sf::Color::White, sf::Texture texture = sf::Texture(), int life = 3, int score = 0);
     ~Player();
 
 

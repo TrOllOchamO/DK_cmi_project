@@ -8,6 +8,7 @@
 #include "Circle.hpp"
 #include "Physics.hpp"
 #include "Player.hpp"
+#include "Text.hpp"
 
 enum GameState
 {
@@ -32,6 +33,7 @@ public:
     void handle_events();
     void update(float dt);
     void render();
+    void animation();
 
     void add_element_to_background(Element *element);
 
@@ -42,6 +44,7 @@ public:
     int get_windowHeight() const;
     sf::Font get_font() const;
     UserInputs get_user_inputs() const;
+    sf::Texture get_texture_mur() const;
 
     // Setter
     void set_mario(Player *mario);
@@ -53,6 +56,7 @@ private:
     GameState game_state;
     int m_windowWidth;
     int m_windowHeight;
+    int m_animation;
     UserInputs m_inputs;
 
     std::vector<Element*> m_backGroundElements;
@@ -62,10 +66,12 @@ private:
     // the window and resources
     sf::RenderWindow m_window;
 
-    //Murs
-    sf::Image m_murs[2];
+    // Murs
+    sf::Texture m_mur;
+    sf::Image m_mario_img[4];
+    sf::Texture m_marios_life;
 
-    //Fonts
+    // Fonts
     sf::Font m_font;
     sf::Text m_text_score;
 };

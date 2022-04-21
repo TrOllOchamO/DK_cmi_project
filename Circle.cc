@@ -1,14 +1,12 @@
 #include "Circle.hpp"
 
-Circle::Circle(float x, float y, int radius, float rotation, bool hasGravity, float velocityOnX, float velocityOnY, sf::Color color) : 
-Element(x, y, rotation, hasGravity, velocityOnX, velocityOnY, color), m_radius(radius)
+Circle::Circle(float x, float y, int radius, float rotation, bool hasGravity, float velocityOnX, float velocityOnY, sf::Color color, sf::Texture texture) : 
+Element(x, y, rotation, hasGravity, velocityOnX, velocityOnY, color, texture), m_radius(radius)
 {
-    
 }
 
 Circle::~Circle()
 {
-    
 }
 
 void Circle::draw(sf::RenderWindow &window)
@@ -17,6 +15,7 @@ void Circle::draw(sf::RenderWindow &window)
     circle.setFillColor(m_color);
     circle.setPosition(m_x, m_y);
     circle.rotate(m_rotation);
+    circle.setTexture(&m_texture);
     window.draw(circle);
 }
 

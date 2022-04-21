@@ -1,9 +1,9 @@
 #include "Game.hpp"
 
-Game::Game() : m_windowWidth(960), m_windowHeight(540), m_mario(nullptr),
+Game::Game() : m_windowWidth(1000), m_windowHeight(800), m_mario(nullptr),
 m_window(sf::VideoMode(m_windowWidth, m_windowHeight), L"Donkey Kong Arcade Incroyable")
 {
-  load_resources();
+  Game::load_resources();
 }
 
 Game::~Game()
@@ -18,15 +18,33 @@ Game::~Game()
 
 void Game::load_resources()
 {
-    m_font.loadFromFile("resources/fonts/arial.ttf");
-    if (!m_murs[0].loadFromFile("resources/images/mur1.jpg"))
+  m_font.loadFromFile("resources/fonts/arial.ttf");
+    if (!m_mur.loadFromFile("resources/images/mur1.jpg"))
     {
       std::cout << "Error, could not load mur1.jpg" << std::endl;
     }
-    if (!m_murs[1].loadFromFile("resources/images/mur2.jpg"))
+    if (!m_marios_life.loadFromFile("resources/images/mur1.jpg"))
     {
-      std::cout << "Error, could not load mur2.jpg" << std::endl;
+      std::cout << "Error, could not load mur1.jpg" << std::endl;
     }
+    if (!m_mario_img[0].loadFromFile("resources/images/mario_stopped.png"))
+    {
+      std::cout << "Error, could not load mario_stopped.png" << std::endl;
+    }
+    if (!m_mario_img[1].loadFromFile("resources/images/mario_running1.png"))
+    {
+      std::cout << "Error, could not load mario_running1.png" << std::endl;
+    }
+    if (!m_mario_img[2].loadFromFile("resources/images/mario_running2.png"))
+    {
+      std::cout << "Error, could not load mario_running2.png" << std::endl;
+    }
+    if (!m_mario_img[3].loadFromFile("resources/images/mario_jumping.png"))
+    {
+      std::cout << "Error, could not load mario_jumping.png" << std::endl;
+    }
+
+    m_mur.setRepeated(true);
 }
 
 void Game::handle_events() 
@@ -65,6 +83,7 @@ void Game::handle_events()
             break;
           case sf::Keyboard::Right:
             m_inputs.rightKeyPressed = false;
+            break;
           case sf::Keyboard::Up:
             m_inputs.upKeyPressed = false;
           default:
@@ -81,14 +100,26 @@ void Game::handle_events()
 void Game::update(float dt)
 {
   // Effectue ces évènements lors qu'une touche est appuyé
-  if (m_inputs.leftKeyPressed) {  m_mario->set_velocity_on_x(-100); }
-  else if (m_inputs.rightKeyPressed) {  m_mario->set_velocity_on_x(100); }
-  else {  m_mario->set_velocity_on_x(0); }
+  if (m_inputs.leftKeyPressed) {  
+    m_mario->set_velocity_on_x(-250);
+    animation();
+  }
+  else if (m_inputs.rightKeyPressed) {  
+    m_mario->set_velocity_on_x(250);
+    animation();
+  }
+  else {  
+    m_mario->set_velocity_on_x(0);
+    m_mario->set_texture(m_mario_img[0]); // Texture of mario when he's not moving
+  }
 
-  if (m_inputs.upKeyPressed) { m_mario->set_velocity_on_y(-100);  }
+  if (m_inputs.upKeyPressed) { 
+    m_mario->set_velocity_on_y(-250);
+    m_mario->set_texture(m_mario_img[3]); // Texture of mario when he's jumping
+  }
   // else { m_mario->set_velocity_on_y(0); }
 
-  Physics::apply_gravity(m_mario, dt, 100);
+  Physics::apply_gravity(m_mario, dt, 700);
   m_mario->update_position(dt);
 
   Vector2D direction;
@@ -126,12 +157,45 @@ void Game::add_element_to_background(Element *element)
   m_backGroundElements.push_back(element);
 }
 
+void Game::animation()
+{
+  sf::Clock sprites;
+  if (sprites.getElapsedTime().asSeconds() >= 0.5)
+  {
+    sprites.restart().asSeconds();
+    switch (m_animation)
+    {
+    case 0:
+      m_mur.loadFromImage(m_mario_img[0]);
+      m_mur.setRepeated(true);
+      m_animation += 1;
+      break;
+    case 1:
+      m_mur.loadFromImage(m_mario_img[1]);
+      m_mur.setRepeated(true);
+      m_animation += 1;
+      break;
+    case 2:
+      m_mur.loadFromImage(m_mario_img[2]);
+      m_animation = 0;
+      break;
+    default:
+      std::cout << "Error: Unknown animation" << std::endl;
+    }
+  }
+  else
+  {
+    sprites.restart().asSeconds();
+  }
+}
+
 // getters
 int Game::get_windowWidth() const { return m_windowWidth; }
 int Game::get_windowHeight() const { return m_windowHeight; }
 bool Game::is_open() const { return m_window.isOpen(); }
 sf::Font Game::get_font() const { return m_font; }
 UserInputs Game::get_user_inputs() const { return m_inputs; }
+sf::Texture Game::get_texture_mur() const { return m_mur; }
 
 // setters
 void Game::set_mario(Player *mario) { m_mario = mario;}

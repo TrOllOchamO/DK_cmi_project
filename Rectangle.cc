@@ -2,8 +2,8 @@
 
 #define PI 3.14159265
 
-Rectangle::Rectangle(float x, float y, int width, int height, float rotation, bool hasGravity, float velocityOnX, float velocityOnY, sf::Color color) : 
-Element(x, y, rotation, hasGravity, velocityOnX, velocityOnY, color), m_width(width), m_height(height)
+Rectangle::Rectangle(float x, float y, int width, int height, float rotation, bool hasGravity, float velocityOnX, float velocityOnY, sf::Color color, sf::Texture texture) :
+Element(x, y, rotation, hasGravity, velocityOnX, velocityOnY, color, texture), m_width(width), m_height(height)
 {
 
 }
@@ -15,10 +15,14 @@ Rectangle::~Rectangle()
 
 void Rectangle::draw(sf::RenderWindow &window)
 {
+    auto size = m_texture.getSize(); // Get the size of the texture
+
     sf::RectangleShape rectangle(sf::Vector2f(m_width, m_height));
     rectangle.setFillColor(m_color);
     rectangle.setPosition(m_x, m_y);
     rectangle.rotate(m_rotation);
+    rectangle.setTexture(&m_texture);
+    rectangle.setTextureRect(sf::IntRect(0, 0, size.x * m_width / m_height, size.y)); // Set the position of the texture to be displayed in the rect
     window.draw(rectangle);
 }
 

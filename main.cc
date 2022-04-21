@@ -6,8 +6,8 @@
 #include "Game.hpp"
 #include "Maps.hpp"
 
-#define NB_FPS 200.0
-#define FRAME_DURATION 1/NB_FPS
+#define NB_FPS 60
+#define FRAME_DURATION 1.0/NB_FPS
 
 int main()
 {

@@ -1,7 +1,7 @@
 #include "Player.hpp"
 
-Player::Player(float x, float y, int width, int height, float rotation, bool hasGravity, float velocityOnX, float velocityOnY, sf::Color color, int life, int score) : 
-Rectangle(x, y, width, height, rotation, hasGravity, velocityOnX, velocityOnY, color), m_life(life), m_score(score)
+Player::Player(float x, float y, int width, int height, float rotation, bool hasGravity, float velocityOnX, float velocityOnY, sf::Color color,sf::Texture texture, int life, int score) : 
+Rectangle(x, y, width, height, rotation, hasGravity, velocityOnX, velocityOnY, color, texture), m_life(life), m_score(score)
 {
 
 }

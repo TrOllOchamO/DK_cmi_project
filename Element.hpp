@@ -8,7 +8,7 @@
 class Element
 {
 public:
-    Element(float x, float y, float rotation = 0, bool hasGravity = false, float velocityOnX = 0, float velocityOnY = 0, sf::Color color = sf::Color::White);
+    Element(float x, float y, float rotation = 0, bool hasGravity = false, float velocityOnX = 0, float velocityOnY = 0, sf::Color color = sf::Color::White, sf::Texture texture = sf::Texture());
     virtual ~Element();
 
     void update_position(float timeElapsed);
@@ -25,6 +25,7 @@ public:
     void set_velocity_on_x(float velocityOnX);
     void set_velocity_on_y(float velocityOnY);
     void set_color(sf::Color color);
+    void set_texture(sf::Image image);
 
     float get_x() const;
     float get_y() const;
@@ -41,5 +42,5 @@ protected:
     float m_velocityOnX;
     float m_velocityOnY;
     sf::Color m_color;
+    sf::Texture m_texture;
 };
-
