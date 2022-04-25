@@ -10,6 +10,7 @@
 #include "Player.hpp"
 #include "Text.hpp"
 #include "Resources.hpp"
+#include "Inputs.hpp"
 
 enum GameState
 {
@@ -18,34 +19,23 @@ enum GameState
     GAME_START
 };
 
-struct UserInputs
-{
-    bool leftKeyPressed = false;
-    bool rightKeyPressed = false;
-    bool upKeyPressed = false;
-};
-
 class Game
 {
 public:
     Game();
     ~Game();
 
-    void handle_events();
-    void update(float dt);
-    void render();
-    void animation(bool facing);
+    void update(float dt); // update every elements of the game by aplying physics on them
+    void render(); // render a frame of the game
 
     void add_element_to_background(Element *element);
-
-    bool is_open() const;
+    void set_elements_resources(); // set the resources pointer to every elements of the game
 
     // Getters
+    bool is_open() const;
     int get_windowWidth() const;
     int get_windowHeight() const;
-    sf::Font get_fonts() const;
-    UserInputs get_user_inputs() const;
-    Resources* get_resources() const;
+    Resources* get_resources_pointer() const;
 
     // Setter
     void set_mario(Player *mario);
@@ -54,8 +44,7 @@ private:
     GameState game_state;
     int m_windowWidth;
     int m_windowHeight;
-    int m_animation = 0;
-    UserInputs m_inputs;
+    Inputs m_userInputs;
 
     std::vector<Element*> m_backGroundElements;
     std::list<Element*> m_movingElements;

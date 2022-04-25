@@ -19,11 +19,6 @@ int main()
    * GAME LOOP
    */
   while (game.is_open()) {
-    
-    /*
-     * event loop
-     */
-      game.handle_events();
 
     /*
      * update state

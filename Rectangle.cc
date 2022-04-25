@@ -75,3 +75,8 @@ Vector2D Rectangle::get_futhest_point(const Vector2D &direction) const
 
     return futhest;
 }
+
+
+// Getters
+int Rectangle::get_height() const { return m_height; }
+int Rectangle::get_width() const { return m_width; }

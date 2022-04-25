@@ -4,6 +4,7 @@
 #include <iostream>
 
 #include "Math.hpp"
+#include "Resources.hpp"
 
 class Element
 {
@@ -30,7 +31,7 @@ public:
     void set_velocity_on_y(float velocityOnY);
     void set_color(sf::Color color);
     void set_texture(sf::Image image);
-    void set_texture_reversed(sf::Texture texture);
+    void set_resources_pointer(Resources *resources);
 
     float get_x() const;
     float get_y() const;
@@ -50,4 +51,5 @@ protected:
     sf::Texture m_texture;
     int m_animation = 0; // store the index of the current element texture
     float m_animation_time = 0; // store the time since the last animation occured
+    Resources *m_resourcesPointer;
 };

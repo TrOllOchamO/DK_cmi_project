@@ -7,12 +7,12 @@ struct Resources
 {
     // Elements textures
     sf::Texture m_walls[1];
-    sf::Image m_mario_img[4];
-    sf::Texture m_marios_life;
+    sf::Image m_player_img[4];
+    sf::Texture m_players_life;
 
     // Fonts
     sf::Font m_fonts[1];
     sf::Text m_text_score;
 
-    void load_resources1();
+    static void load_resources1(Resources *resources);
 };

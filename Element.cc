@@ -1,7 +1,8 @@
 #include "Element.hpp"
 
 Element::Element(float x, float y, float rotation, bool hasGravity, float velocityOnX, float velocityOnY, sf::Color color, sf::Texture texture): 
-m_x(x), m_y(y), m_rotation(rotation), m_hasGravity(hasGravity), m_velocityOnX(velocityOnX), m_velocityOnY(velocityOnY), m_color(color), m_texture(texture)
+m_x(x), m_y(y), m_rotation(rotation), m_hasGravity(hasGravity), m_velocityOnX(velocityOnX), m_velocityOnY(velocityOnY), m_color(color), 
+m_texture(texture), m_resourcesPointer(nullptr)
 {
     
 }
@@ -36,6 +37,7 @@ void Element::set_velocity_on_x(float velocityOnX) { m_velocityOnX = velocityOnX
 void Element::set_velocity_on_y(float velocityOnY) { m_velocityOnY = velocityOnY; }
 void Element::set_color(sf::Color color) { m_color = color; }
 void Element::set_texture(sf::Image image) { m_texture.loadFromImage(image); }
+void Element::set_resources_pointer(Resources *resources) { m_resourcesPointer = resources; }
 
 // Getters
 float Element::get_x() const { return m_x; }
