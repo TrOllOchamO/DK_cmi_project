@@ -4,7 +4,12 @@ Element::Element(float x, float y, float rotation, bool hasGravity, float veloci
 m_x(x), m_y(y), m_rotation(rotation), m_hasGravity(hasGravity), m_velocityOnX(velocityOnX), m_velocityOnY(velocityOnY), m_color(color), 
 m_texture(texture), m_resourcesPointer(nullptr)
 {
-    
+}
+
+Element::Element(float x, float y, float rotation, bool hasGravity, float velocityOnX, float velocityOnY, sf::Texture texture) :
+m_x(x), m_y(y), m_rotation(rotation), m_hasGravity(hasGravity), m_velocityOnX(velocityOnX), m_velocityOnY(velocityOnY), m_color(sf::Color::White),
+m_texture(texture), m_resourcesPointer(nullptr)
+{
 }
 
 Element::~Element()

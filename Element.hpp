@@ -6,10 +6,19 @@
 #include "Math.hpp"
 #include "Resources.hpp"
 
+enum ELementType
+{
+    BARREL,
+    PLAYER,
+    DONKEY_KONG,
+    LADDER
+};
+
 class Element
 {
 public:
     Element(float x, float y, float rotation = 0, bool hasGravity = false, float velocityOnX = 0, float velocityOnY = 0, sf::Color color = sf::Color::White, sf::Texture texture = sf::Texture());
+    Element(float x, float y, float rotation = 0, bool hasGravity = false, float velocityOnX = 0, float velocityOnY = 0, sf::Texture texture = sf::Texture());
     virtual ~Element();
 
     // Used when the Element has to move
@@ -30,7 +39,7 @@ public:
     void set_velocity_on_x(float velocityOnX);
     void set_velocity_on_y(float velocityOnY);
     void set_color(sf::Color color);
-    void set_texture(sf::Image image);
+    void set_texture(sf::Image image);  
     void set_resources_pointer(Resources *resources);
 
     float get_x() const;
@@ -51,5 +60,6 @@ protected:
     sf::Texture m_texture;
     int m_animation = 0; // store the index of the current element texture
     float m_animation_time = 0; // store the time since the last animation occured
-    Resources *m_resourcesPointer;
+    Resources *m_resourcesPointer; // Pointing to the loaded resoucres of the running game, usefull when the Element has more than one texture (animation)
+    ELementType m_elementType; // Store the type of the element used to resolve colision between specific objects (like barrels and players)
 };

@@ -10,7 +10,7 @@ void Resources::load_resources1(Resources *resources)
     {
         std::cout << "Error, could not load mur1.jpg" << std::endl;
     }
-    if (!resources->m_players_life.loadFromFile("resources/images/marios_life.png"))
+    if (!resources->m_players_life[0].loadFromFile("resources/images/marios_life.png"))
     {
         std::cout << "Error, could not load marios_life.png" << std::endl;
     }
@@ -30,5 +30,14 @@ void Resources::load_resources1(Resources *resources)
     {
         std::cout << "Error, could not load mario_jumping.png" << std::endl;
     }
+    if (!resources->m_player_img[4].loadFromFile("resources/images/mario_climbing_ladders.png"))
+    {
+        std::cout << "Error, could not load mario_climbing_ladders.png" << std::endl;
+    }
+    if (!resources->m_ladders[0].loadFromFile("resources/images/ladders.png"))
+    {
+        std::cout << "Error, could not load ladders.png" << std::endl;
+    }
    resources->m_walls[0].setRepeated(true);
+   resources->m_ladders[0].setRepeated(true);
 }

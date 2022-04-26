@@ -31,10 +31,10 @@ void Game::update(float dt)
     for (int i = 0; i < m_backGroundElements.size(); ++i)
     {
         const float distance = Physics::EPA(m_mario, m_backGroundElements[i], direction);
-        if (distance > 0) // if there is collision
+        if (distance < 0) // if there is collision
         {
             m_backGroundElements[i]->set_color(sf::Color::Red);
-            m_mario->move_in_a_direction(direction, -distance);
+            m_mario->move_in_a_direction(direction, distance);
         }
         else
         {

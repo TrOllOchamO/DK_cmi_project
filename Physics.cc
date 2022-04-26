@@ -127,7 +127,7 @@ float Physics::EPA(const Element *e1, const Element *e2, Vector2D &direction, st
         if(supportDistance - closestEdgeDistance < EPA_PRECISION_WANTED)
         {
             direction = closestEdgeNormal;
-            return closestEdgeDistance;
+            return -closestEdgeDistance; // negate the distance to correct the winding probleme
         }
 
         // if we still are able to expand the polytope, insert the new point in the polytope
@@ -146,6 +146,11 @@ float Physics::EPA(const Element *e1, const Element *e2, Vector2D &direction)
 Vector2D Physics::support(const Element *e1, const Element *e2, Vector2D &direction)
 {
     return e1->get_futhest_point(direction) - e2->get_futhest_point(-direction);
+}
+
+void Physics::solve_colision(Element *e1, Element *e2, Vector2D &direction, float penetrationDepth)
+{
+    
 }
 
 bool Physics::handle_simplex(std::vector<Vector2D> &simplex, Vector2D &direction)

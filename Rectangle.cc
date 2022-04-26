@@ -5,12 +5,14 @@
 Rectangle::Rectangle(float x, float y, int width, int height, float rotation, bool hasGravity, float velocityOnX, float velocityOnY, sf::Color color, sf::Texture texture) :
 Element(x, y, rotation, hasGravity, velocityOnX, velocityOnY, color, texture), m_width(width), m_height(height)
 {
+}
 
+Rectangle::Rectangle(float x, float y, int width, int height, float rotation, bool hasGravity, float velocityOnX, float velocityOnY, sf::Texture texture) : Element(x, y, rotation, hasGravity, velocityOnX, velocityOnY, texture), m_width(width), m_height(height)
+{
 }
 
 Rectangle::~Rectangle()
 {
-    
 }
 
 void Rectangle::draw(sf::RenderWindow &window)
