@@ -40,10 +40,17 @@ public:
     // fill the direction vector with the direction of the shortest distance
     static float EPA(const Element *e1, const Element *e2, Vector2D &direction);
 
+    // return the shortest distance between 2 shapes
+    // fill the direction vector with the direction of the shortest distance
+    static float EPA(const Element *e1, const Element *e2);
+
+    // apply log(n) times EPA in order to find the position of the 2 elements just before the colision occure
+    // then modify the coordinates of the 2 elements to theses coordinates
+    static void set_position_before_colision(Element *e1, Element *e2, float dt);
+
     // this function is called when 2 elements are coliding,
-    // the fuction correct the position of the 2 elements accordingly to their properties (velocity, bounciness, friction...)
-    // then call the method "colision_callback(Element *e)" on both of the colided objects passing the object they are colliding with as parameter
-    static void solve_colision(Element *e1, Element *e2, Vector2D &direction, float penetrationDepth);
+    // the fuction correct the velocity of the 2 elements accordingly to their properties (velocity, bounciness$)
+    static void solve_velocity(Element *e1, Element *e2, const Vector2D &direction, float penetrationDepth);
 
 private:
     // return the point the point on the edge of the Minkowski difference in the given direction

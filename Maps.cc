@@ -12,7 +12,8 @@ void Maps::set_map1(Game &game)
     Resources::load_resources1(gameResources);
 
     // Creating mario
-    const float MARIO_Y = WINDOW_HEIGHT - PLATFORM_HEIGHT - MARIO_SIZE;
+    const float MARIO_OFFSET = -300; // preventing mario to spawn inside the floor
+    const float MARIO_Y = WINDOW_HEIGHT - PLATFORM_HEIGHT - MARIO_SIZE + MARIO_OFFSET;
     Player *mario = new Player(3, MARIO_Y, MARIO_SIZE, MARIO_SIZE, 0, true);
     game.set_mario(mario);
 
@@ -46,6 +47,11 @@ void Maps::set_map1(Game &game)
     // Create stairs
     Rectangle *point_to_reac = new Rectangle(WINDOW_WIDTH / 2 - WINDOW_WIDTH / 16, ADJUSTMENT - MARIO_SIZE * 10, WINDOW_WIDTH / 8, PLATFORM_HEIGHT, 0, false, 0, 0, gameResources->m_ladders[0]);
     game.add_element_to_background(point_to_reac);
+    for (int i = 0; i < 8; i++) {
+        Circle *circle = new Circle(10, 10, 10, 0, true, 250, 0, sf::Color::White);
+    }
+    ScoreBoard *score = new ScoreBoard(0, 0, WINDOW_WIDTH, 200, gameResources->m_fonts, mario);
+    game.add_element_to_background(score);
 
     // Set the new resources for every elements in the game
     game.set_elements_resources();

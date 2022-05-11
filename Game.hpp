@@ -29,6 +29,7 @@ public:
     void render(); // render a frame of the game
 
     void add_element_to_background(Element *element);
+    void add_moving_element(Element *element);
     void set_elements_resources(); // set the resources pointer to every elements of the game
 
     // Getters

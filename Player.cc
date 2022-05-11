@@ -18,7 +18,7 @@ void Player::draw(sf::RenderWindow &window)
     auto size = m_texture.getSize(); // Get the size of the texture
 
     sf::RectangleShape rectangle(sf::Vector2f(get_width(), get_height()));
-    rectangle.setPosition(m_x, m_y);
+    rectangle.setPosition(m_position.x, m_position.y);
     rectangle.setTexture(&m_texture);
     if (m_facingDirection == FACING_RIGHT) {
         rectangle.setTextureRect(sf::IntRect(size.x, 0, -size.x, size.y));
@@ -54,46 +54,54 @@ void Player::update_animation(float dt)
     }
 }
 
-void Player::update_player(Inputs &inputs, float dt)
+bool Player::update_player(Inputs &inputs, float dt)
 {
     // Effectue ces évènements lors qu'une touche est appuyé
     const bool BOTH_RIGHT_AND_LEFT_PRESSED = (inputs.leftKeyPressed && inputs.rightKeyPressed);
     const bool NO_RIGHT_NO_LEFT_PRESSED = !(inputs.leftKeyPressed || inputs.rightKeyPressed);
     const bool MARIO_ISNT_MOVING = (BOTH_RIGHT_AND_LEFT_PRESSED || NO_RIGHT_NO_LEFT_PRESSED);
 
+    bool playerTryToMove(false);
+
     if (MARIO_ISNT_MOVING) // mario stand still
     {
-        m_velocityOnX = 0;
+        m_velocity.x = 0;
         m_texture.loadFromImage(m_resourcesPointer->m_player_img[0]); // Texture of mario when he's not moving
     }
     else if (inputs.leftKeyPressed) // mario is walking on the left
     {
-        m_velocityOnX = -WALKING_SPEED;
+        m_score += 1;
+        m_velocity.x = -WALKING_SPEED;
         m_facingDirection = FACING_LEFT;
+        playerTryToMove = true;
         this->update_animation(dt);
     }
     else // mario is walking to the right
     {
-        m_velocityOnX = WALKING_SPEED;
+        m_velocity.x = WALKING_SPEED;
         m_facingDirection = FACING_RIGHT;
+        playerTryToMove = true;
         this->update_animation(dt);
     }
 
     // case mario jump
     if (inputs.upKeyPressed)
     {
-        m_velocityOnY = -250;
+        m_velocity.y = -250;
+        playerTryToMove = true;
         m_texture.loadFromImage(m_resourcesPointer->m_player_img[3]); // Texture of mario when he's jumping
     }
+
+    return playerTryToMove;
 }
 
 // Getters
-int Player::get_players_life() const { return m_life; }
-int Player::get_players_score() const { return m_score; }
+int Player::get_player_life() const { return m_life; }
+int Player::get_player_score() const { return m_score; }
 
 // Setters
-void Player::set_players_life(int life) { m_life = life; }
-void Player::set_players_score(int score) { m_score = score; }
+void Player::set_player_life(int life) { m_life = life; }
+void Player::set_player_score(int score) { m_score = score; }
 
-void Player::add_players_life(int life) { m_life += life; }
-void Player::add_players_score(int score) { m_score += score; }
+void Player::add_player_life(int life) { m_life += life; }
+void Player::add_player_score(int score) { m_score += score; }

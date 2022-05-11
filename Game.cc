@@ -4,6 +4,7 @@ Game::Game() : m_windowWidth(1000), m_windowHeight(800), m_mario(nullptr),
 m_window(sf::VideoMode(m_windowWidth, m_windowHeight), L"Donkey Kong Arcade Incroyable")//, m_resources(new Resources())
 {
     m_resources = new Resources();
+    m_window.setFramerateLimit(60);
 }
 
 Game::~Game()
@@ -21,12 +22,11 @@ Game::~Game()
 
 void Game::update(float dt)
 {
-    m_userInputs.update(m_window);
-    m_mario->update_player(m_userInputs, dt);
-
     Physics::apply_gravity(m_mario, dt, 700);
+    m_userInputs.update(m_window);
+    bool marioTryToMove(m_mario->update_player(m_userInputs, dt));
     m_mario->update_position(dt);
-
+    
     Vector2D direction;
     for (int i = 0; i < m_backGroundElements.size(); ++i)
     {
@@ -34,7 +34,9 @@ void Game::update(float dt)
         if (distance < 0) // if there is collision
         {
             m_backGroundElements[i]->set_color(sf::Color::Red);
-            m_mario->move_in_a_direction(direction, distance);
+            if (marioTryToMove) { m_mario->move_in_a_direction(direction, distance); }
+            else { Physics::set_position_before_colision(m_mario, m_backGroundElements[i], dt); }
+            // Physics::solve_velocity(m_mario, m_backGroundElements[i], direction, distance);
         }
         else
         {
@@ -58,6 +60,10 @@ void Game::render()
 void Game::add_element_to_background(Element *element)
 {
     m_backGroundElements.push_back(element);
+}
+
+void Game::add_moving_element(Element *element) {
+    m_movingElements.push_back(element);
 }
 
 void Game::set_elements_resources()

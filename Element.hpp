@@ -35,27 +35,35 @@ public:
 
     void set_x(float x);
     void set_y(float y);
+    void set_position(const Vector2D &position);
+    void set_previous_position(const Vector2D &previousPosition);
     void set_has_gravity(bool hasGravity);
     void set_velocity_on_x(float velocityOnX);
     void set_velocity_on_y(float velocityOnY);
+    void set_velocity(const Vector2D &velocity);
+    void set_bounciness(float bounciness);
     void set_color(sf::Color color);
     void set_texture(sf::Image image);  
     void set_resources_pointer(Resources *resources);
 
     float get_x() const;
     float get_y() const;
+    Vector2D get_position() const;
+    Vector2D get_previous_position() const;
     bool get_has_gravity() const;
     float get_velocity_on_x() const;
     float get_velocity_on_y() const;
+    Vector2D get_velocity() const;
+    float get_bounciness() const;
     sf::Color get_color() const;
 
 protected:
-    float m_x;
-    float m_y;
+    Vector2D m_position;
+    Vector2D m_previousPosition;
     float m_rotation;
     bool m_hasGravity;
-    float m_velocityOnX;
-    float m_velocityOnY;
+    Vector2D m_velocity;
+    float m_bounciness = 0; // the bounciness must remain positive, when set to 0 the restitution is null
     sf::Color m_color;
     sf::Texture m_texture;
     int m_animation = 0; // store the index of the current element texture

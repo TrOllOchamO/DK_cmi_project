@@ -21,7 +21,7 @@ void Rectangle::draw(sf::RenderWindow &window)
 
     sf::RectangleShape rectangle(sf::Vector2f(m_width, m_height));
     rectangle.setFillColor(m_color);
-    rectangle.setPosition(m_x, m_y);
+    rectangle.setPosition(m_position.x, m_position.y);
     rectangle.rotate(m_rotation);
     rectangle.setTexture(&m_texture);
     rectangle.setTextureRect(sf::IntRect(0, 0, size.x * m_width / m_height, size.y)); // Set the position of the texture to be displayed in the rect
@@ -36,7 +36,7 @@ Vector2D Rectangle::get_center() const
     const float halfWidth = m_width/2;
     const float halfHeight = m_height/2;
 
-    const Vector2D center = {m_x + halfWidth*cosAngle - halfHeight*sinAngle, m_y + halfWidth*sinAngle + halfHeight*cosAngle};
+    const Vector2D center = {m_position.x + halfWidth*cosAngle - halfHeight*sinAngle, m_position.y + halfWidth*sinAngle + halfHeight*cosAngle};
     return center;
 }
 
@@ -49,10 +49,10 @@ std::vector<Vector2D> Rectangle::get_vertices_coord() const
     // calculate the coordinates of the 4 vertices by taking in account the rotation of the rectangle
     // using this formula : https://stackoverflow.com/questions/1469149/calculating-vertices-of-a-rotated-rectangle#answer-1469166
     std::vector<Vector2D> vertices;
-    vertices.push_back(Vector2D(m_x, m_y)); // top left corner
-    vertices.push_back(Vector2D(m_x + m_width*cosAngle, m_y + sinAngle*m_width)); // top right corner
-    vertices.push_back(Vector2D(m_x + m_width*cosAngle - m_height*sinAngle, m_y + m_width*sinAngle + m_height*cosAngle)); // bottom right corner
-    vertices.push_back(Vector2D(m_x - m_height*sinAngle, m_y + m_height*cosAngle)); // bottom left corner
+    vertices.push_back(Vector2D(m_position.x, m_position.y)); // top left corner
+    vertices.push_back(Vector2D(m_position.x + m_width*cosAngle, m_position.y + sinAngle*m_width)); // top right corner
+    vertices.push_back(Vector2D(m_position.x + m_width*cosAngle - m_height*sinAngle, m_position.y + m_width*sinAngle + m_height*cosAngle)); // bottom right corner
+    vertices.push_back(Vector2D(m_position.x - m_height*sinAngle, m_position.y + m_height*cosAngle)); // bottom left corner
 
     return vertices;
 }

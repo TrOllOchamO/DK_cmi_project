@@ -4,7 +4,10 @@ Circle::Circle(float x, float y, int radius, float rotation, bool hasGravity, fl
 Element(x, y, rotation, hasGravity, velocityOnX, velocityOnY, color, texture), m_radius(radius)
 {
 }
-
+Circle::Circle(float x, float y, int radius, float rotation, bool hasGravity, float velocityOnX, float velocityOnY, sf::Texture texture) : 
+Element(x, y, rotation, hasGravity, velocityOnX, velocityOnY, texture), m_radius(radius)
+{
+}
 Circle::~Circle()
 {
 }
@@ -13,7 +16,7 @@ void Circle::draw(sf::RenderWindow &window)
 {
     sf::CircleShape circle(m_radius);
     circle.setFillColor(m_color);
-    circle.setPosition(m_x, m_y);
+    circle.setPosition(m_position.x, m_position.y);
     circle.rotate(m_rotation);
     circle.setTexture(&m_texture);
     window.draw(circle);
@@ -21,7 +24,7 @@ void Circle::draw(sf::RenderWindow &window)
 
 Vector2D Circle::get_center() const
 {
-    const Vector2D center = {m_x + m_radius, m_y + m_radius};
+    const Vector2D center = {m_position.x + m_radius, m_position.y + m_radius};
     return center;
 }
 

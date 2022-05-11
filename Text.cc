@@ -16,7 +16,7 @@ void Text::draw(sf::RenderWindow &window)
     text.setFont(m_font);
     text.setCharacterSize(m_size);
     text.setFillColor(m_color);
-    text.setPosition(m_x, m_y);
+    text.setPosition(m_position.x, m_position.y);
     window.draw(text);
 }
 

@@ -143,14 +143,66 @@ float Physics::EPA(const Element *e1, const Element *e2, Vector2D &direction)
     return Physics::EPA(e1, e2, direction, polytope);
 }
 
+float Physics::EPA(const Element *e1, const Element *e2)
+{
+    std::vector<Vector2D> polytope;
+    Physics::GJK(e1, e2, polytope);
+    Vector2D direction;
+    return Physics::EPA(e1, e2, direction, polytope);
+}
+
+void Physics::set_position_before_colision(Element *e1, Element *e2, float dt)
+{
+    // replace e1 and e2 at their last position
+    e1->set_position(e1->get_previous_position());
+    e2->set_position(e2->get_previous_position());
+
+    float distance = Physics::EPA(e1, e2);
+
+    // first test if e1 and e2 were already coliding on theire last position, if so we are unable to
+    // determine how they should react now, so we return without doing anything
+    if (distance < 0) { std::cout << "Etait déja en collision" << std::endl; return; }
+
+    // while the 2 elements not close enought or are in colision 
+    while ((distance > EPA_PRECISION_WANTED) || (distance < 0))
+    {
+        dt /= 2;
+
+        // if the 2 elements are too far, forward in time there position
+        if (distance > 0)
+        {
+            e1->update_position(dt);
+            e2->update_position(dt);
+        }
+        else // else the 2 elements already collide, so go back in time
+        {
+            e1->update_position(-dt);
+            e2->update_position(-dt);
+        }
+
+        // recalculate the distance with their new position
+        distance = Physics::EPA(e1, e2);
+    }
+}
+
+void Physics::solve_velocity(Element *e1, Element *e2, const Vector2D &direction, float penetrationDepth)
+{
+    // simply applying on the 2 elements the formula found in this video : https://youtu.be/ymgbDdO8hKI?t=290
+    const Vector2D e1Velocity = e1->get_velocity();
+    const float e1Bouncingness = e1->get_bounciness();
+    const Vector2D e1NewVelocity = e1Velocity - (1+e1Bouncingness)*penetrationDepth*direction;
+    e1->set_velocity(e1NewVelocity);
+    std::cout << e1NewVelocity << std::endl;
+
+    const Vector2D e2Velocity = e2->get_velocity();
+    const float e2Bouncingness = e2->get_bounciness();
+    const Vector2D e2NewVelocity = e2Velocity + (1+e2Bouncingness)*penetrationDepth*direction;
+    e2->set_velocity(e2NewVelocity);
+}
+
 Vector2D Physics::support(const Element *e1, const Element *e2, Vector2D &direction)
 {
     return e1->get_futhest_point(direction) - e2->get_futhest_point(-direction);
-}
-
-void Physics::solve_colision(Element *e1, Element *e2, Vector2D &direction, float penetrationDepth)
-{
-    
 }
 
 bool Physics::handle_simplex(std::vector<Vector2D> &simplex, Vector2D &direction)
