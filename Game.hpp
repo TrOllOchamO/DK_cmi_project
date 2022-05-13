@@ -40,6 +40,7 @@ public:
 
     // Setter
     void set_mario(Player *mario);
+    void set_music(sf::Music *music);
 
 private:
     GameState game_state;
@@ -48,7 +49,7 @@ private:
     Inputs m_userInputs;
 
     std::vector<Element*> m_backGroundElements;
-    std::list<Element*> m_movingElements;
+    std::vector<Element*> m_movingElements; // Avant c'était list
     Player *m_mario;
 
     sf::RenderWindow m_window;

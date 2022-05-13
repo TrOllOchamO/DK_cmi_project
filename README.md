@@ -2,7 +2,6 @@
 
 À faire :
 Tonneaux qui roules
-Scoreboard
 Problèmes collision
 Mario qui 
 

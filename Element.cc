@@ -1,14 +1,14 @@
 #include "Element.hpp"
 
-Element::Element(float x, float y, float rotation, bool hasGravity, float velocityOnX, float velocityOnY, sf::Color color, sf::Texture texture): 
-m_position(x, y), m_previousPosition(x, y), m_rotation(rotation), m_hasGravity(hasGravity), m_velocity(velocityOnX, velocityOnY), m_color(color), 
+Element::Element(float x, float y, float rotation, bool hasGravity, float velocityOnX, float velocityOnY, bool collide, sf::Color color, sf::Texture texture): 
+m_position(x, y), m_previousPosition(x, y), m_rotation(rotation), m_hasGravity(hasGravity), m_velocity(velocityOnX, velocityOnY), m_collide(collide), m_color(color), 
 m_texture(texture), m_resourcesPointer(nullptr)
 {
 
 }
 
-Element::Element(float x, float y, float rotation, bool hasGravity, float velocityOnX, float velocityOnY, sf::Texture texture) :
-m_position(x, y), m_previousPosition(x, y), m_rotation(rotation), m_hasGravity(hasGravity), m_velocity(velocityOnX, velocityOnY), m_color(sf::Color::White),
+Element::Element(float x, float y, float rotation, bool hasGravity, float velocityOnX, float velocityOnY, bool collide, sf::Texture texture) :
+m_position(x, y), m_previousPosition(x, y), m_rotation(rotation), m_hasGravity(hasGravity), m_velocity(velocityOnX, velocityOnY), m_collide(collide), m_color(sf::Color::White),
 m_texture(texture), m_resourcesPointer(nullptr)
 {
     
@@ -33,7 +33,12 @@ void Element::move_in_a_direction(const Vector2D &direction, float distance)
     m_position.y += direction.y*distance;
 }
 
-void Element::update_animation(float dt)
+void Element::update_animation(float dt, const sf::Image img[])
+{
+    
+}
+
+void Element::update_animation2(float dt, const sf::Image img[])
 {
     
 }
@@ -68,3 +73,4 @@ Vector2D Element::get_velocity() const {return m_velocity; }
 float Element::get_bounciness() const { return m_bounciness; }
 sf::Color Element::get_color() const { return m_color; }
 Vector2D Element::get_previous_position() const { return m_previousPosition; }
+bool Element::get_collide() const { return m_collide; };

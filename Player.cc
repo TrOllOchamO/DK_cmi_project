@@ -2,8 +2,8 @@
 
 #define WALKING_SPEED 250
 
-Player::Player(float x, float y, int width, int height, float rotation, bool hasGravity, float velocityOnX, float velocityOnY, sf::Color color,sf::Texture texture) : 
-Rectangle(x, y, width, height, rotation, hasGravity, velocityOnX, velocityOnY, color, texture)
+Player::Player(float x, float y, int width, int height, float rotation, bool hasGravity, float velocityOnX, float velocityOnY, bool collide, sf::Color color,sf::Texture texture) : 
+Rectangle(x, y, width, height, rotation, hasGravity, velocityOnX, velocityOnY, collide, color, texture)
 {
 
 }
@@ -28,7 +28,7 @@ void Player::draw(sf::RenderWindow &window)
     window.draw(rectangle);
 }
 
-void Player::update_animation(float dt)
+void Player::update_animation(float dt, const sf::Image img[])
 {
     m_clock += dt;
     if (m_clock >= 0.1)
@@ -37,15 +37,19 @@ void Player::update_animation(float dt)
         switch (m_animation)
         {
         case 0:
-            m_texture.loadFromImage(m_resourcesPointer->m_player_img[0]);
+            m_texture.loadFromImage(img[0]);
             m_animation += 1;
             break;
         case 1:
-            m_texture.loadFromImage(m_resourcesPointer->m_player_img[1]);
+            m_texture.loadFromImage(img[1]);
             m_animation += 1;
             break;
         case 2:
-            m_texture.loadFromImage(m_resourcesPointer->m_player_img[2]);
+            m_texture.loadFromImage(img[2]);
+            m_animation += 1;
+            break;
+        case 3:
+            m_texture.loadFromImage(img[1]);
             m_animation = 0;
             break;
         default:
@@ -54,7 +58,7 @@ void Player::update_animation(float dt)
     }
 }
 
-bool Player::update_player(Inputs &inputs, float dt)
+bool Player::update_player(Inputs &inputs, float dt, const sf::Image img[])
 {
     // Effectue ces évènements lors qu'une touche est appuyé
     const bool BOTH_RIGHT_AND_LEFT_PRESSED = (inputs.leftKeyPressed && inputs.rightKeyPressed);
@@ -66,7 +70,7 @@ bool Player::update_player(Inputs &inputs, float dt)
     if (MARIO_ISNT_MOVING) // mario stand still
     {
         m_velocity.x = 0;
-        m_texture.loadFromImage(m_resourcesPointer->m_player_img[0]); // Texture of mario when he's not moving
+        m_texture.loadFromImage(img[0]); // Texture of mario when he's not moving
     }
     else if (inputs.leftKeyPressed) // mario is walking on the left
     {
@@ -74,14 +78,14 @@ bool Player::update_player(Inputs &inputs, float dt)
         m_velocity.x = -WALKING_SPEED;
         m_facingDirection = FACING_LEFT;
         playerTryToMove = true;
-        this->update_animation(dt);
+        this->update_animation(dt, img);
     }
     else // mario is walking to the right
     {
         m_velocity.x = WALKING_SPEED;
         m_facingDirection = FACING_RIGHT;
         playerTryToMove = true;
-        this->update_animation(dt);
+        this->update_animation(dt, img);
     }
 
     // case mario jump
@@ -89,7 +93,7 @@ bool Player::update_player(Inputs &inputs, float dt)
     {
         m_velocity.y = -250;
         playerTryToMove = true;
-        m_texture.loadFromImage(m_resourcesPointer->m_player_img[3]); // Texture of mario when he's jumping
+        m_texture.loadFromImage(img[3]); // Texture of mario when he's jumping
     }
 
     return playerTryToMove;

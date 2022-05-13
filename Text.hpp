@@ -4,7 +4,7 @@
 
 class Text : public Element {
 public:
-    Text(float x, float y, std::string text, sf::Font font, int size = 5, float rotation = 0, sf::Color color = sf::Color::White);
+    Text(float x, float y, std::string text, sf::Font font, int size = 5, float rotation = 0, bool collide = false, sf::Color color = sf::Color::White);
     Text();
     ~Text();
 

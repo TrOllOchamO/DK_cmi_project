@@ -1,7 +1,7 @@
 #include "Text.hpp"
 
-Text::Text(float x, float y, std::string text, sf::Font font, int size, float rotation, sf::Color color)
-    : Element(x, y, 0, false, 0, 0, color), m_text(text), m_size(size), m_font(font)
+Text::Text(float x, float y, std::string text, sf::Font font, int size, float rotation, bool collide, sf::Color color)
+    : Element(x, y, 0, false, 0, 0, collide, color), m_text(text), m_size(size), m_font(font)
 {
 
 }
@@ -25,5 +25,5 @@ void Text::set_text(std::string text) { m_text = text; }
 
 
 // Getters
-Vector2D Text::get_center() const {}
-Vector2D Text::get_futhest_point(const Vector2D &direction) const {}
+Vector2D Text::get_center() const {  }
+Vector2D Text::get_futhest_point(const Vector2D &direction) const {  }

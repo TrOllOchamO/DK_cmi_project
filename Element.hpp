@@ -1,10 +1,19 @@
 #pragma once
 
 #include <SFML/Graphics.hpp>
+#include <SFML/Audio.hpp>
 #include <iostream>
 
 #include "Math.hpp"
 #include "Resources.hpp"
+
+enum Repeated
+{
+    NO,
+    VERTICALY,
+    HORIZONTALY,
+    BOTH
+};
 
 enum ELementType
 {
@@ -14,11 +23,17 @@ enum ELementType
     LADDER
 };
 
+enum FacingDirection
+{
+    FACING_LEFT,
+    FACING_RIGHT
+};
+
 class Element
 {
 public:
-    Element(float x, float y, float rotation = 0, bool hasGravity = false, float velocityOnX = 0, float velocityOnY = 0, sf::Color color = sf::Color::White, sf::Texture texture = sf::Texture());
-    Element(float x, float y, float rotation = 0, bool hasGravity = false, float velocityOnX = 0, float velocityOnY = 0, sf::Texture texture = sf::Texture());
+    Element(float x, float y, float rotation = 0, bool hasGravity = false, float velocityOnX = 0, float velocityOnY = 0, bool collide = true, sf::Color color = sf::Color::White, sf::Texture texture = sf::Texture());
+    Element(float x, float y, float rotation = 0, bool hasGravity = false, float velocityOnX = 0, float velocityOnY = 0, bool collide = true, sf::Texture texture = sf::Texture());
     virtual ~Element();
 
     // Used when the Element has to move
@@ -27,7 +42,9 @@ public:
 
     // Used to render the Element
     virtual void draw(sf::RenderWindow &window) = 0;
-    virtual void update_animation(float dt); // take in parameter the time since the last call
+    virtual void update_animation(float dt, const sf::Image img[]); // take in parameter the time since the last call
+    virtual void update_animation2(float dt, const sf::Image img[]);
+
 
     // Used to calculate colision between Elements
     virtual Vector2D get_center() const = 0;
@@ -56,18 +73,22 @@ public:
     Vector2D get_velocity() const;
     float get_bounciness() const;
     sf::Color get_color() const;
+    bool get_collide() const;
 
 protected:
+    bool m_collide;
+    bool m_hasGravity;
+    float m_rotation;
+    float m_bounciness = 0; // the bounciness must remain positive, when set to 0 the restitution is null
+    float m_animation_time = 0; // store the time since the last animation occured
+    int m_animation = 0; // store the index of the current element texture
+
     Vector2D m_position;
     Vector2D m_previousPosition;
-    float m_rotation;
-    bool m_hasGravity;
     Vector2D m_velocity;
-    float m_bounciness = 0; // the bounciness must remain positive, when set to 0 the restitution is null
+
     sf::Color m_color;
     sf::Texture m_texture;
-    int m_animation = 0; // store the index of the current element texture
-    float m_animation_time = 0; // store the time since the last animation occured
-    Resources *m_resourcesPointer; // Pointing to the loaded resoucres of the running game, usefull when the Element has more than one texture (animation)
+    Resources *m_resourcesPointer; // Pointing to the loaded resources of the running game, usefull when the Element has more than one texture (animation)
     ELementType m_elementType; // Store the type of the element used to resolve colision between specific objects (like barrels and players)
 };

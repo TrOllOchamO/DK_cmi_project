@@ -2,12 +2,13 @@
 
 #define PI 3.14159265
 
-Rectangle::Rectangle(float x, float y, int width, int height, float rotation, bool hasGravity, float velocityOnX, float velocityOnY, sf::Color color, sf::Texture texture) :
-Element(x, y, rotation, hasGravity, velocityOnX, velocityOnY, color, texture), m_width(width), m_height(height)
+Rectangle::Rectangle(float x, float y, int width, int height, float rotation, bool hasGravity, float velocityOnX, float velocityOnY, bool collide, sf::Color color, sf::Texture texture, Repeated repeat) :
+Element(x, y, rotation, hasGravity, velocityOnX, velocityOnY, collide, color, texture), m_width(width), m_height(height), m_repeat(repeat)
 {
 }
 
-Rectangle::Rectangle(float x, float y, int width, int height, float rotation, bool hasGravity, float velocityOnX, float velocityOnY, sf::Texture texture) : Element(x, y, rotation, hasGravity, velocityOnX, velocityOnY, texture), m_width(width), m_height(height)
+Rectangle::Rectangle(float x, float y, int width, int height, float rotation, bool hasGravity, float velocityOnX, float velocityOnY, bool collide, sf::Texture texture, Repeated repeat) :
+Element(x, y, rotation, hasGravity, velocityOnX, velocityOnY, collide, texture), m_width(width), m_height(height), m_repeat(repeat)
 {
 }
 
@@ -24,7 +25,21 @@ void Rectangle::draw(sf::RenderWindow &window)
     rectangle.setPosition(m_position.x, m_position.y);
     rectangle.rotate(m_rotation);
     rectangle.setTexture(&m_texture);
-    rectangle.setTextureRect(sf::IntRect(0, 0, size.x * m_width / m_height, size.y)); // Set the position of the texture to be displayed in the rect
+
+    // Here we suppose that an object can't be repeated and facing to a direction
+    if (m_facingDirection == FACING_RIGHT)
+    {
+        rectangle.setTextureRect(sf::IntRect(size.x, 0, -size.x, size.y));
+    }
+    if (m_repeat == VERTICALY) {
+        rectangle.setTextureRect(sf::IntRect(0, 0, size.x, size.y * m_height / m_width)); // Set the position of the texture to be displayed in the rect
+    }
+    else if (m_repeat == HORIZONTALY) {
+        rectangle.setTextureRect(sf::IntRect(0, 0, size.x * m_width / m_height, size.y)); // Set the position of the texture to be displayed in the rect
+    }
+    else if (m_repeat == BOTH) {
+        rectangle.setTextureRect(sf::IntRect(0, 0, size.x * m_width / m_height, size.y * m_height / m_width)); // Set the position of the texture to be displayed in the rect
+    }
     window.draw(rectangle);
 }
 
@@ -78,7 +93,76 @@ Vector2D Rectangle::get_futhest_point(const Vector2D &direction) const
     return futhest;
 }
 
+void Rectangle::update_animation(float dt, const sf::Image img[])
+{
+    m_clock += dt;
+    if (m_clock >= 0.3)
+    {
+        m_clock = 0;
+        switch (m_animation)
+        {
+        case 0:
+            m_texture.loadFromImage(img[0]);
+            m_animation += 1;
+            break;
+        case 1:
+            m_texture.loadFromImage(img[1]);
+            m_animation += 1;
+            break;
+        case 2:
+            m_texture.loadFromImage(img[2]);
+            m_animation += 1;
+            break;
+        case 3:
+            m_texture.loadFromImage(img[2]);
+            m_animation += 1;
+            m_facingDirection = FACING_RIGHT;
+            break;
+        case 4:
+            m_texture.loadFromImage(img[1]);
+            m_animation = 0;
+            m_facingDirection = FACING_LEFT;
+            break;
+        default:
+            std::cout << "Error: Unknown animation" << std::endl;
+        }
+    }
+}
+
+void Rectangle::update_animation2(float dt, const sf::Image img[])
+{
+    m_clock += dt;
+    if (m_clock >= 0.3)
+    {
+        m_clock = 0;
+        switch (m_animation)
+        {
+        case 0:
+            m_texture.loadFromImage(img[0]);
+            m_animation += 1;
+            m_facingDirection = FACING_LEFT;
+            break;
+        case 1:
+            m_texture.loadFromImage(img[1]);
+            m_animation += 1;
+            break;
+        case 2:
+            m_texture.loadFromImage(img[1]);
+            m_animation += 1;
+            m_facingDirection = FACING_RIGHT;
+            break;
+        case 3:
+            m_texture.loadFromImage(img[0]);
+            m_animation = 0;
+            break;
+        default:
+            std::cout << "Error: Unknown animation" << std::endl;
+        }
+    }
+}
 
 // Getters
 int Rectangle::get_height() const { return m_height; }
 int Rectangle::get_width() const { return m_width; }
+
+void Rectangle::set_repeated(Repeated repeat) { m_repeat = repeat; };

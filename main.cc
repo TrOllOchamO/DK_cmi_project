@@ -10,7 +10,7 @@ int main()
 {
   sf::Clock clock;
   Game game;
-  Maps::set_map1(game);
+  Maps::set_map2(game);
 
   /*
    * GAME LOOP

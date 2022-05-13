@@ -1,11 +1,11 @@
 #include "Circle.hpp"
 
-Circle::Circle(float x, float y, int radius, float rotation, bool hasGravity, float velocityOnX, float velocityOnY, sf::Color color, sf::Texture texture) : 
-Element(x, y, rotation, hasGravity, velocityOnX, velocityOnY, color, texture), m_radius(radius)
+Circle::Circle(float x, float y, int radius, float rotation, bool hasGravity, float velocityOnX, float velocityOnY, bool collide, sf::Color color, sf::Texture texture) : 
+Element(x, y, rotation, hasGravity, velocityOnX, velocityOnY, collide, color, texture), m_radius(radius)
 {
 }
-Circle::Circle(float x, float y, int radius, float rotation, bool hasGravity, float velocityOnX, float velocityOnY, sf::Texture texture) : 
-Element(x, y, rotation, hasGravity, velocityOnX, velocityOnY, texture), m_radius(radius)
+Circle::Circle(float x, float y, int radius, float rotation, bool hasGravity, float velocityOnX, float velocityOnY, bool collide, sf::Texture texture) : 
+Element(x, y, rotation, hasGravity, velocityOnX, velocityOnY, collide, texture), m_radius(radius)
 {
 }
 Circle::~Circle()

@@ -7,8 +7,8 @@
 class ScoreBoard : public Rectangle 
 {
 public:
-    ScoreBoard(float x, float y, int width, int height, const sf::Font *fonts, const Player *player, sf::Color color = sf::Color::White, sf::Texture texture = sf::Texture());
-    ScoreBoard(float x, float y, int width, int height, const sf::Font *fonts, const Player *player, sf::Texture texture);
+    ScoreBoard(float x, float y, int width, int height, const sf::Font *fonts, const Player *player, bool collide = false, sf::Color color = sf::Color::White, sf::Texture texture = sf::Texture());
+    ScoreBoard(float x, float y, int width, int height, const sf::Font *fonts, const Player *player, bool collide, sf::Texture texture);
     ~ScoreBoard();
 
     void draw(sf::RenderWindow &window);

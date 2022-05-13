@@ -1,6 +1,6 @@
 #include "Game.hpp"
 
-Game::Game() : m_windowWidth(1000), m_windowHeight(800), m_mario(nullptr),
+Game::Game() : m_windowWidth(640), m_windowHeight(800), m_mario(nullptr),
 m_window(sf::VideoMode(m_windowWidth, m_windowHeight), L"Donkey Kong Arcade Incroyable")//, m_resources(new Resources())
 {
     m_resources = new Resources();
@@ -24,25 +24,31 @@ void Game::update(float dt)
 {
     Physics::apply_gravity(m_mario, dt, 700);
     m_userInputs.update(m_window);
-    bool marioTryToMove(m_mario->update_player(m_userInputs, dt));
+    bool marioTryToMove(m_mario->update_player(m_userInputs, dt, m_resources->m_player_img));
     m_mario->update_position(dt);
     
     Vector2D direction;
     for (int i = 0; i < m_backGroundElements.size(); ++i)
     {
-        const float distance = Physics::EPA(m_mario, m_backGroundElements[i], direction);
-        if (distance < 0) // if there is collision
-        {
-            m_backGroundElements[i]->set_color(sf::Color::Red);
-            if (marioTryToMove) { m_mario->move_in_a_direction(direction, distance); }
-            else { Physics::set_position_before_colision(m_mario, m_backGroundElements[i], dt); }
-            // Physics::solve_velocity(m_mario, m_backGroundElements[i], direction, distance);
-        }
-        else
-        {
-            m_backGroundElements[i]->set_color(sf::Color::White);
+        if (m_backGroundElements[i]->get_collide()) {
+            
+            const float distance = Physics::EPA(m_mario, m_backGroundElements[i], direction);
+            if (distance < 0) // if there is collision
+            {
+                m_backGroundElements[i]->set_color(sf::Color::Red);
+                if (marioTryToMove) { m_mario->move_in_a_direction(direction, distance); }
+                else { Physics::set_position_before_colision(m_mario, m_backGroundElements[i], dt); }
+                // Physics::solve_velocity(m_mario, m_backGroundElements[i], direction, distance);
+            }
+            else
+            {
+                m_backGroundElements[i]->set_color(sf::Color::White);
+            }
         }
     }
+    m_movingElements[0]->update_animation(dt, m_resources->m_dk_img);
+    m_movingElements[1]->update_animation2(dt, m_resources->m_peach_img);
+    m_movingElements[2]->update_animation2(dt, m_resources->m_flames_img);
 }
 
 void Game::render()
